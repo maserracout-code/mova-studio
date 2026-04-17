@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mova Studio — Catálogo de Serviços</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --violet: #8A8CF8;
+    --lime: #C0F13E;
+    --lilac: #BBA8F8;
+    --ink: #0C0C14;
+    --ink2: #12121E;
+    --ink3: #1A1A2A;
+    --cream: #EDEAF7;
+    --text-muted: rgba(237,234,247,0.45);
+    --text-sub: rgba(237,234,247,0.65);
+    --border: rgba(138,140,248,0.15);
+    --border-bright: rgba(138,140,248,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  a { color: inherit; text-decoration: none; }
+
+  html { scroll-behavior: smooth; }
+
+  /* ─── NAVBAR ─── */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: rgba(12,12,20,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .navbar.scrolled {
+    background: rgba(12,12,20,0.97);
+  }
+
+  .nav-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-brand span { color: var(--lime); }
+
+  .nav-icon-sm {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #9B8CF8 0%, #5A4EE8 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-icon-sm svg { width: 16px; height: 16px; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--lilac);
+    background: rgba(138,140,248,0.1);
+  }
+
+  .nav-menu-btn {
+    display: none;
+    background: none;
+    border: 1px solid var(--border-bright);
+    color: var(--cream);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: rgba(12,12,20,0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    z-index: 999;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-drawer.open { display: flex; }
+
+  .nav-drawer a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-sub) !important;
+    text-decoration: none !important;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-drawer a:visited {
+    color: var(--text-sub) !important;
+  }
+
+  .nav-drawer a:hover {
+    color: var(--lilac) !important;
+    background: rgba(138,140,248,0.1);
+  }
+
+  /* Also fix nav-links */
+  .nav-links a {
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* back-to-top */
+  .back-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ink2);
+    border: 1px solid var(--border-bright);
+    color: var(--lilac);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 900;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.2s;
+    text-decoration: none;
+  }
+
+  .back-top.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .back-top:hover {
+    background: rgba(138,140,248,0.15);
+    border-color: var(--violet);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-menu-btn { display: block; }
+    .navbar { padding: 0 20px; }
+  }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding-top: 56px;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
+  }
+
+  .label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ─── LAYOUT ─── */
+  .page {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ─── PAGE 1: CAPA ─── */
+  #capa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    position: relative;
+    background: var(--ink);
+  }
+
+  .bg-glow-capa {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(138,140,248,0.12) 0%, rgba(192,241,62,0.04) 40%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .capa-logo {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 48px;
+  }
+
+  .icon-m {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #9B8CF8 0%, #7B6CF0 60%, #5A4EE8 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    box-shadow: 0 20px 60px rgba(138,140,248,0.35), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    position: relative;
+  }
+
+  .icon-m::after {
+    content: '';
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--lime);
+    border-radius: 50%;
+  }
+
+  .icon-m svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .capa-wordmark {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(56px, 8vw, 96px);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: var(--cream);
+  }
+
+  .capa-wordmark span.accent {
+    color: var(--lime);
+  }
+
+  .capa-wordmark span.slash {
+    color: var(--violet);
+    font-weight: 300;
+    margin: 0 8px;
+  }
+
+  .capa-wordmark span.studio {
+    color: var(--lilac);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+  }
+
+  .capa-tagline {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-sub);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .capa-headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: clamp(22px, 3.5vw, 36px);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    max-width: 580px;
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+
+  .capa-headline em {
+    font-style: normal;
+    color: var(--lime);
+  }
+
+  .capa-sub {
+    font-size: 15px;
+    color: var(--text-sub);
+    max-width: 440px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .pill-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    border: 1px solid var(--border-bright);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+  }
+
+  .pill.active {
+    background: rgba(138,140,248,0.15);
+    border-color: var(--violet);
+    color: var(--lilac);
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+    margin: 0;
+  }
+
+  /* ─── SECTION STRUCTURE ─── */
+  .section {
+    padding: 96px 0;
+    position: relative;
+  }
+
+  .section-header {
+    margin-bottom: 56px;
+  }
+
+  .section-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 56px);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--cream);
+  }
+
+  .section-title em {
+    font-style: normal;
+    color: var(--lime);
+  }
+
+  /* ─── PAGE 2: APRESENTAÇÃO ─── */
+  #apresentacao {
+    background: var(--ink2);
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .intro-left p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text-sub);
+    font-weight: 300;
+  }
+
+  .intro-left p strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .intro-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pillar-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(138,140,248,0.04);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .pillar-item:hover {
+    border-color: var(--border-bright);
+    background: rgba(138,140,248,0.08);
+  }
+
+  .pillar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    flex-shrink: 0;
+  }
+
+  .pillar-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  /* ─── PAGE 3: PLANOS ─── */
+  #planos {
+    background: var(--ink);
+  }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .plan-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    background: var(--ink2);
+  }
+
+  .plan-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-bright);
+  }
+
+  .plan-card.featured {
+    border-color: var(--violet);
+    background: linear-gradient(160deg, rgba(138,140,248,0.1) 0%, var(--ink2) 60%);
+  }
+
+  .plan-card.featured::before {
+    content: 'MAIS POPULAR';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    background: var(--lime);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .plan-badge {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+
+  .plan-badge.green { background: #4ECAA0; }
+  .plan-badge.blue { background: var(--violet); }
+  .plan-badge.purple { background: #C084FC; }
+
+  .plan-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .plan-tier {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .plan-price {
+    margin-bottom: 28px;
+  }
+
+  .price-amount {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--lime);
+    line-height: 1;
+  }
+
+  .price-period {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .plan-features li::before {
+    content: '→';
+    color: var(--violet);
+    font-size: 12px;
+    margin-top: 1px;
+    flex-shrink: 0;
+    font-weight: 400;
+  }
+
+  .plan-cta {
+    margin-top: 32px;
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-bright);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lilac);
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .plan-cta:hover {
+    background: rgba(138,140,248,0.15);
+    border-color: var(--violet);
+    color: var(--cream);
+  }
+
+  .plan-card.featured .plan-cta {
+    background: var(--violet);
+    border-color: var(--violet);
+    color: var(--ink);
+  }
+
+  .plan-card.featured .plan-cta:hover {
+    background: var(--lilac);
+    border-color: var(--lilac);
+  }
+
+  /* ─── PAGE 4: AVULSOS ─── */
+  #avulsos {
+    background: var(--ink2);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .service-group {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .service-group-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .group-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .group-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lilac);
+  }
+
+  .service-group-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    margin-top: -8px;
+  }
+
+  .service-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+
+  .service-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .service-name {
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .service-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--lime);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ─── PAGE 5: EXTRAS ─── */
+  #extras {
+    background: var(--ink);
+  }
+
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .extra-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+    background: var(--ink2);
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .extra-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-bright);
+  }
+
+  .extra-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--lilac));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .extra-card:hover::after {
+    opacity: 1;
+  }
+
+  .extra-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .extra-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .extra-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--lime);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .extra-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* ─── PAGE 6: PERSONALIZADOS ─── */
+  #personalizados {
+    background: var(--ink2);
+  }
+
+  .custom-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .custom-text p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--text-sub);
+    font-weight: 300;
+  }
+
+  .custom-text p strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .custom-text blockquote {
+    margin-top: 28px;
+    padding: 24px 28px;
+    border-left: 3px solid var(--lime);
+    background: rgba(192,241,62,0.05);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .custom-text blockquote p {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .custom-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .custom-tag {
+    padding: 14px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    transition: all 0.2s;
+  }
+
+  .custom-tag:hover {
+    border-color: var(--violet);
+    color: var(--lilac);
+    background: rgba(138,140,248,0.06);
+  }
+
+  /* ─── PAGE 7: COMO FUNCIONA ─── */
+  #como-funciona {
+    background: var(--ink);
+  }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+  }
+
+  .steps-row::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-bright), var(--border-bright), transparent);
+    z-index: 0;
+  }
+
+  .step-item {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--border-bright);
+    background: var(--ink2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--violet);
+    position: relative;
+  }
+
+  .step-num::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(138,140,248,0.1);
+  }
+
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ─── PAGE 8: DIFERENCIAL ─── */
+  #diferenciais {
+    background: var(--ink2);
+  }
+
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .diff-card {
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s;
+  }
+
+  .diff-card:hover {
+    border-color: var(--border-bright);
+  }
+
+  .diff-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(138,140,248,0.15);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .diff-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+
+  .diff-desc {
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ─── PAGE 9: ENCERRAMENTO ─── */
+  #encerramento {
+    background: var(--ink);
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-glow-end {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse at center bottom, rgba(138,140,248,0.14) 0%, rgba(192,241,62,0.04) 50%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .end-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .end-headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 7vw, 80px);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    color: var(--cream);
+    max-width: 720px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .end-headline em {
+    font-style: normal;
+    color: var(--lime);
+  }
+
+  .end-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-sub);
+    max-width: 460px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .end-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--lime);
+    color: var(--ink);
+    text-decoration: none;
+    padding: 16px 40px;
+    border-radius: 100px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(192,241,62,0.25);
+  }
+
+  .end-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(192,241,62,0.35);
+  }
+
+  .end-cta::after {
+    content: '→';
+    font-size: 18px;
+  }
+
+  .end-brand {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .end-brand-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+  }
+
+  .end-brand-name span { color: var(--lime); }
+
+  .end-brand-tagline {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── WHATSAPP BUTTON ─── */
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 28px;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    border-radius: 100px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 28px rgba(37,211,102,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(37,211,102,0.45);
+  }
+
+  .whatsapp-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    .whatsapp-btn { padding: 14px; border-radius: 50%; bottom: 80px; right: 20px; }
+    .whatsapp-btn .wpp-text { display: none; }
+    .back-top { bottom: 20px; right: 20px; }
+  }
+
+  /* ─── TRÁFEGO PAGO CARD ─── */
+  .trafego-card {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    border: 1px solid var(--violet);
+    border-radius: 20px;
+    padding: 40px 48px;
+    background: linear-gradient(135deg, rgba(138,140,248,0.08) 0%, var(--ink2) 60%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trafego-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--violet), var(--lime));
+  }
+
+  .trafego-badge {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .trafego-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .trafego-title span { color: var(--lime); }
+
+  .trafego-desc {
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .trafego-price-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .trafego-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 44px;
+    font-weight: 900;
+    color: var(--lime);
+    line-height: 1;
+  }
+
+  .trafego-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trafego-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text-sub);
+    font-weight: 300;
+  }
+
+  .trafego-features li::before {
+    content: '→';
+    color: var(--lime);
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .trafego-card {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 28px 24px;
+    }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .intro-grid { grid-template-columns: 1fr; }
+    .custom-block { grid-template-columns: 1fr; gap: 40px; }
+    .steps-row { grid-template-columns: repeat(2, 1fr); }
+    .steps-row::before { display: none; }
+    .diff-grid { grid-template-columns: 1fr; }
+    .extras-grid { grid-template-columns: repeat(2, 1fr); }
+    .section { padding: 64px 0; }
+  }
+
+  @media (max-width: 480px) {
+    .extras-grid { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+    .end-brand { flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  /* ─── SCROLL ANIMATION ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar" id="navbar">
+  <a href="#capa" class="nav-brand">
+    <div class="nav-icon-sm">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 28V10L19 22L32 10V28" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div><span style="white-space:nowrap;">MOV<span style="color:var(--lime)">A</span> STUDIO</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#apresentacao">Sobre</a></li>
+    <li><a href="#planos">Planos</a></li>
+    <li><a href="#avulsos">Serviços</a></li>
+    <li><a href="#extras">Extras</a></li>
+    <li><a href="#como-funciona">Processo</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn">Menu ☰</button>
+</nav>
+
+<a href="https://wa.me/5585992915938?text=Olá!%20Vi%20o%20catálogo%20da%20Mova%20Studio%20e%20quero%20saber%20mais%20😊" target="_blank" class="whatsapp-btn">
+  <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="wpp-text">Falar no WhatsApp</span>
+</a>
+
+<div class="nav-drawer" id="navDrawer">
+  <a href="#apresentacao" onclick="closeDrawer()">Sobre</a>
+  <a href="#planos" onclick="closeDrawer()">Planos Mensais</a>
+  <a href="#avulsos" onclick="closeDrawer()">Serviços Avulsos</a>
+  <a href="#extras" onclick="closeDrawer()">Extras Estratégicos</a>
+  <a href="#personalizados" onclick="closeDrawer()">Pacotes</a>
+  <a href="#como-funciona" onclick="closeDrawer()">Como Funciona</a>
+  <a href="#diferenciais" onclick="closeDrawer()">Diferenciais</a>
+</div>
+
+<a href="#capa" class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+
+<!-- ═══ PAGE 1: CAPA ═══ -->
+<section id="capa" class="page">
+  <div class="bg-glow-capa"></div>
+  <div class="capa-logo fade-in">
+    <div class="icon-m">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 28V10L19 22L32 10V28" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="capa-wordmark">
+      MOV<span class="accent">A</span><span class="slash">/</span><span class="studio">STUDIO</span>
+    </div>
+    <div class="capa-tagline">Design · Social Media · Branding</div>
+  </div>
+  <div class="fade-in" style="transition-delay:0.15s; position: relative; z-index:1; text-align:center;">
+    <div class="capa-headline">
+      Sua marca <em>crescendo</em><br>com presença digital<br>que gera resultado
+    </div>
+    <p class="capa-sub">Ajudamos pequenos negócios a construírem uma presença digital profissional, organizada e estratégica.</p>
+    <div class="pill-group">
+      <div class="pill active">Design</div>
+      <div class="pill active">Social Media</div>
+      <div class="pill">Branding</div>
+      <div class="pill">Estratégia</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 2: APRESENTAÇÃO ═══ -->
+<section id="apresentacao" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">01 — Sobre</span>
+      <h2 class="section-title">Quem somos<br>e o que <em>fazemos</em></h2>
+    </div>
+    <div class="intro-grid fade-in">
+      <div class="intro-left">
+        <p>A <strong>Mova Studio</strong> é um estúdio de design e social media criado para transformar pequenos negócios em marcas que <strong>comunicam com clareza</strong> e vendem com consistência.</p>
+        <br>
+        <p>Não somos uma agência genérica. Somos <strong>estratégicos, limpos e confiáveis</strong> — focados em entregar identidade visual e conteúdo que realmente funciona para o seu negócio.</p>
+        <br>
+        <p>Cada projeto é tratado com <strong>atenção ao detalhe</strong>, sempre alinhado com os objetivos de crescimento do cliente.</p>
+      </div>
+      <div class="intro-pillars">
+        <div class="pillar-item">
+          <div class="pillar-dot"></div>
+          <span class="pillar-text">Design com propósito</span>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-dot"></div>
+          <span class="pillar-text">Conteúdo estratégico</span>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-dot"></div>
+          <span class="pillar-text">Identidade profissional</span>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-dot"></div>
+          <span class="pillar-text">Simplicidade inteligente</span>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-dot"></div>
+          <span class="pillar-text">Resultados reais</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 3: PLANOS MENSAIS ═══ -->
+<section id="planos" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">02 — Planos Mensais</span>
+      <h2 class="section-title">Escolha seu<br><em>plano</em> ideal</h2>
+    </div>
+    <div class="plans-grid fade-in">
+
+      <!-- START -->
+      <div class="plan-card">
+        <div class="plan-badge green"></div>
+        <div class="plan-name">Plano</div>
+        <div class="plan-tier">Start</div>
+        <div class="plan-price">
+          <div class="price-amount">R$ 297</div>
+          <div class="price-period">/mês</div>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>8 posts mensais</li>
+          <li>Posts personalizados (imagem ou carrossel conforme estratégia)</li>
+          <li>Design profissional</li>
+          <li>Legendas simples</li>
+          <li>Até 2 ajustes por post</li>
+        </ul>
+        <a href="https://wa.me/5585992915938?text=Olá!%20Tenho%20interesse%20no%20Plano%20Start%20da%20Mova%20Studio%20(R$%20297/mês).%20Pode%20me%20contar%20mais%3F%20😊" target="_blank" class="plan-cta">Começar agora</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card featured">
+        <div class="plan-badge blue"></div>
+        <div class="plan-name">Plano</div>
+        <div class="plan-tier">Pro</div>
+        <div class="plan-price">
+          <div class="price-amount">R$ 497</div>
+          <div class="price-period">/mês</div>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>12 posts mensais</li>
+          <li>Posts personalizados (imagem ou carrossel conforme estratégia)</li>
+          <li>Design + direcionamento</li>
+          <li>Legendas mais trabalhadas</li>
+          <li>Sugestões de conteúdo</li>
+          <li>Até 3 ajustes por post</li>
+        </ul>
+        <a href="https://wa.me/5585992915938?text=Olá!%20Tenho%20interesse%20no%20Plano%20Pro%20da%20Mova%20Studio%20(R$%20497/mês).%20Pode%20me%20contar%20mais%3F%20😊" target="_blank" class="plan-cta">Começar agora</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="plan-card">
+        <div class="plan-badge purple"></div>
+        <div class="plan-name">Plano</div>
+        <div class="plan-tier">Premium</div>
+        <div class="plan-price">
+          <div class="price-amount">R$ 697</div>
+          <div class="price-period">/mês</div>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>16 posts mensais</li>
+          <li>Posts personalizados (imagem ou carrossel conforme estratégia)</li>
+          <li>Design estratégico</li>
+          <li>Legendas completas</li>
+          <li>Planejamento de conteúdo</li>
+          <li>Até 4 ajustes por post</li>
+        </ul>
+        <a href="https://wa.me/5585992915938?text=Olá!%20Tenho%20interesse%20no%20Plano%20Premium%20da%20Mova%20Studio%20(R$%20697/mês).%20Pode%20me%20contar%20mais%3F%20😊" target="_blank" class="plan-cta">Começar agora</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 4: SERVIÇOS AVULSOS ═══ -->
+<section id="avulsos" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">03 — Serviços Avulsos</span>
+      <h2 class="section-title">Só o que<br>você <em>precisa</em></h2>
+    </div>
+    <div class="services-grid fade-in">
+
+      <div class="service-group">
+        <div class="service-group-header">
+          <span class="group-icon">📱</span>
+          <span class="group-title">Posts & Design</span>
+        </div>
+        <ul class="service-list">
+          <li class="service-item">
+            <span class="service-name">Post avulso</span>
+            <span class="service-price">R$ 35</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Carrossel até 5 páginas</span>
+            <span class="service-price">R$ 80</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Carrossel até 10 páginas</span>
+            <span class="service-price">R$ 120</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Pack 10 posts</span>
+            <span class="service-price">R$ 280</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="service-group">
+        <div class="service-group-header">
+          <span class="group-icon">🧠</span>
+          <span class="group-title">Branding</span>
+        </div>
+        <ul class="service-list">
+          <li class="service-item">
+            <span class="service-name">Logo profissional</span>
+            <span class="service-price">R$ 150</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Identidade visual completa</span>
+            <span class="service-price">R$ 397</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="service-group">
+        <div class="service-group-header">
+          <span class="group-icon">📲</span>
+          <span class="group-title">Instagram</span>
+        </div>
+        <ul class="service-list">
+          <li class="service-item">
+            <span class="service-name">Bio profissional</span>
+            <span class="service-price">R$ 50</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Destaques do feed</span>
+            <span class="service-price">R$ 80</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Revisão de perfil</span>
+            <span class="service-price">R$ 120</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="service-group">
+        <div class="service-group-header">
+          <span class="group-icon">🌐</span>
+          <span class="group-title">Páginas & Estrutura Digital</span>
+        </div>
+        <ul class="service-list">
+          <li class="service-item">
+            <span class="service-name">Link na bio personalizado</span>
+            <span class="service-price">R$ 120</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Cardápio digital</span>
+            <span class="service-price">R$ 150</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Landing page</span>
+            <span class="service-price">R$ 297</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="service-group">
+        <div class="service-group-header">
+          <span class="group-icon">📊</span>
+          <span class="group-title">Apresentações</span>
+        </div>
+        <div class="service-group-desc">Criação de apresentações visuais profissionais para serviços, propostas ou negócios.</div>
+        <ul class="service-list">
+          <li class="service-item">
+            <span class="service-name">Até 5 slides</span>
+            <span class="service-price">R$ 97</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Até 10 slides</span>
+            <span class="service-price">R$ 147</span>
+          </li>
+          <li class="service-item">
+            <span class="service-name">Slide adicional</span>
+            <span class="service-price">R$ 15</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- TRÁFEGO PAGO — card destaque -->
+    <div class="trafego-card fade-in">
+      <div class="trafego-left">
+        <div class="trafego-badge">🎯</div>
+        <div class="trafego-title">Tráfego Pago <span>&</span> Captação</div>
+        <div class="trafego-desc">Gestão de anúncios para atrair clientes através do Instagram e Facebook — com estratégia, segmentação e acompanhamento.</div>
+        <div class="trafego-price-label">a partir de</div>
+        <div class="trafego-price">R$ 397</div>
+      </div>
+      <div class="trafego-right">
+        <ul class="trafego-features">
+          <li>Criação de campanhas</li>
+          <li>Segmentação de público</li>
+          <li>Estrutura básica de anúncios</li>
+          <li>Acompanhamento inicial</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 5: EXTRAS ESTRATÉGICOS ═══ -->
+<section id="extras" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">04 — Extras Estratégicos</span>
+      <h2 class="section-title">Ferramentas que<br><em>aceleram</em> resultados</h2>
+    </div>
+    <div class="extras-grid fade-in">
+
+      <div class="extra-card">
+        <span class="extra-icon">📊</span>
+        <div class="extra-name">Diagnóstico de Perfil</div>
+        <div class="extra-price">R$ 147</div>
+        <div class="extra-desc">Análise completa do seu perfil: bio, identidade visual, frequência de posts, engajamento e posicionamento. Você recebe um relatório com os pontos de melhoria e o que fazer primeiro para crescer de verdade.</div>
+      </div>
+
+      <div class="extra-card">
+        <span class="extra-icon">🧠</span>
+        <div class="extra-name">Ideias de Conteúdo</div>
+        <div class="extra-price">R$ 127</div>
+        <div class="extra-desc">30 dias de conteúdo planejado pra você. Recebe um calendário com temas, formatos e sugestões de legenda para cada post — tudo pensado pro seu nicho, sem precisar quebrar a cabeça todo dia sobre o que postar.</div>
+      </div>
+
+      <div class="extra-card">
+        <span class="extra-icon">💬</span>
+        <div class="extra-name">Respostas WhatsApp</div>
+        <div class="extra-price">R$ 127</div>
+        <div class="extra-desc">Um script completo de atendimento para o seu WhatsApp — desde a primeira mensagem até o fechamento. Respostas para dúvidas frequentes, objeções e follow-up. Seu atendimento passa a ser rápido, profissional e consistente.</div>
+      </div>
+
+      <div class="extra-card">
+        <span class="extra-icon">🎥</span>
+        <div class="extra-name">Roteiro de Vídeo</div>
+        <div class="extra-price">R$ 67</div>
+        <div class="extra-desc">Roteiro estruturado para Reels ou Stories: gancho, desenvolvimento e CTA. Você só precisa gravar — a gente cuida do que falar, na ordem certa, pra prender a atenção do começo ao fim.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 6: PACOTES ═══ -->
+<section id="personalizados" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">05 — Pacotes Personalizados</span>
+      <h2 class="section-title">Monte o seu<br><em>pacote</em></h2>
+    </div>
+    <div class="custom-block fade-in">
+      <div class="custom-text">
+        <p>Você pode combinar <strong>qualquer serviço</strong> e montar um pacote sob medida para o momento da sua marca.</p>
+        <br>
+        <p>Quanto mais completo o pacote, <strong>melhor a condição especial</strong> que preparamos pra você.</p>
+        <blockquote>
+          <p>"Você não precisa de tudo de uma vez. Precisa do que resolve o seu problema agora."</p>
+        </blockquote>
+      </div>
+      <div class="custom-visual">
+        <div class="custom-tag">✦ Design + Branding</div>
+        <div class="custom-tag">✦ Social Media + Estratégia</div>
+        <div class="custom-tag">✦ Instagram Completo</div>
+        <div class="custom-tag">✦ Plano + Extras</div>
+        <div class="custom-tag">✦ Seu pacote do zero</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 7: COMO FUNCIONA ═══ -->
+<section id="como-funciona" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">06 — Processo</span>
+      <h2 class="section-title">Como<br><em>funciona</em></h2>
+    </div>
+    <div class="steps-row fade-in">
+
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-title">Escolha</div>
+        <div class="step-desc">Selecione o plano ou os serviços avulsos que fazem sentido para você</div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-title">Organização</div>
+        <div class="step-desc">Organizamos o conteúdo e as referências para começar a produção</div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-title">Aprovação</div>
+        <div class="step-desc">Você revisa, ajusta e aprova antes da entrega final</div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-title">Entrega</div>
+        <div class="step-desc">Recebe tudo pronto, organizado e nos formatos corretos</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 8: DIFERENCIAIS ═══ -->
+<section id="diferenciais" class="section page">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-number">07 — Diferenciais</span>
+      <h2 class="section-title">Por que<br><em>Mova Studio</em></h2>
+    </div>
+    <div class="diff-grid fade-in">
+
+      <div class="diff-card">
+        <div class="diff-num">01</div>
+        <div class="diff-title">Design Estratégico</div>
+        <div class="diff-desc">Cada post, cada peça tem um objetivo. Criamos para gerar resultado, não só para parecer bonito.</div>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-num">02</div>
+        <div class="diff-title">Conteúdo com Foco</div>
+        <div class="diff-desc">Produzimos conteúdo alinhado ao que o seu público quer ver e ao que sua marca precisa comunicar.</div>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-num">03</div>
+        <div class="diff-title">Simplicidade e Clareza</div>
+        <div class="diff-desc">Nada de poluição visual ou comunicação confusa. Aqui a mensagem chega limpa e direta.</div>
+      </div>
+
+      <div class="diff-card">
+        <div class="diff-num">04</div>
+        <div class="diff-title">Ideal para Pequenos Negócios</div>
+        <div class="diff-desc">Entendemos o seu momento. Entregamos qualidade de grande agência com a atenção de um estúdio dedicado.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PAGE 9: ENCERRAMENTO ═══ -->
+<section id="encerramento" class="page">
+  <div class="bg-glow-end"></div>
+  <div class="end-label">Pronto para crescer?</div>
+  <div class="end-headline">
+    Sua marca<br><em>merece</em> ser<br>levada a sério
+  </div>
+  <p class="end-sub">
+    Dê o primeiro passo para uma presença digital que comunica, convence e converte.
+  </p>
+  <a href="https://wa.me/5585992915938?text=Olá!%20Vi%20o%20catálogo%20da%20Mova%20Studio%20e%20quero%20saber%20mais%20😊" target="_blank" class="end-cta">Fale com a Mova Studio</a>
+  <div class="end-brand">
+    <div class="end-brand-name">MOV<span>A</span> STUDIO</div>
+    <div class="end-brand-tagline">Design · Social Media · Branding</div>
+  </div>
+</section>
+
+<script>
+  // ── Fade-in on scroll ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── Navbar scroll + back-to-top ──
+  const navbar = document.getElementById('navbar');
+  const backTop = document.getElementById('backTop');
+  const sections = ['capa','apresentacao','planos','avulsos','extras','personalizados','como-funciona','diferenciais','encerramento'];
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    navbar.classList.toggle('scrolled', y > 40);
+    backTop.classList.toggle('show', y > 400);
+
+    // Active nav link
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && y >= el.offsetTop - 80) current = id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // ── Mobile drawer ──
+  const menuBtn = document.getElementById('menuBtn');
+  const navDrawer = document.getElementById('navDrawer');
+
+  menuBtn.addEventListener('click', () => {
+    const isOpen = navDrawer.classList.toggle('open');
+    menuBtn.textContent = isOpen ? 'Fechar ✕' : 'Menu ☰';
+  });
+
+  function closeDrawer() {
+    navDrawer.classList.remove('open');
+    menuBtn.textContent = 'Menu ☰';
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!navbar.contains(e.target) && !navDrawer.contains(e.target)) closeDrawer();
+  });
+</script>
+</body>
+</html>
